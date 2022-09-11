@@ -1,5 +1,5 @@
 import Axios from "axios";
-import fs, { accessSync } from "fs";
+import fs from "fs";
 import async from "async";
 import ics from "ics";
 
@@ -158,7 +158,7 @@ const lectures = detailedCourses
       name,
       code,
       organisations: course.details.organisations,
-      hit: course,
+      course: course,
       lectures: studyGroupInstances
         .flatMap((studyGroupInstance) =>
           studyGroupInstance.events.map((e) => ({
@@ -195,37 +195,78 @@ const toIcsDate = (date) => {
  * @param {import("./api").Location} location
  */
 const extractExactumClass = (location) => {
-  const match = localized(location.name).match(/Exactum, (\w+\d+)/i);
+  let match = localized(location.name).match(/Exactum, (\w+\d+)/i);
+  if (match) return match[1];
+
+  match = localized(location.name).match(/(\w+\d+) \(Exactum\)/i);
   return match?.[1];
 };
 
-const events = lectures.flatMap((lecture) =>
-  lecture.lectures.map(
-    /**
-     * @returns {import("ics").EventAttributes}
-     */
-    (l) => {
+/**
+ * Lectures, sorted by lecture start time ascending.
+ */
+export const events = lectures
+  .flatMap((lecture) =>
+    lecture.lectures.map((l) => {
       const classId = extractExactumClass(l.locations[0]);
 
       return {
-        start: toIcsDate(new Date(l.start)),
-        end: l.end ? toIcsDate(new Date(l.end)) : undefined,
-        title: `${lecture.name} (${classId})`,
-        description: `${lecture.code} ${lecture.name}: ${
-          l.studyGroupType
-        }\n\n${localized(l.locations[0].name)}`,
+        start: new Date(l.start),
+        end: l.end ? new Date(l.end) : undefined,
+        lectureName: `${lecture.name}`,
+        exactumClass: classId,
+        studyGroupType: l.studyGroupType,
         location: localized(l.locations[0].name),
+        organisation: lecture.organisations.find(
+          (org) =>
+            org.roleUrn ===
+            "urn:code:organisation-role:responsible-organisation"
+        ),
+        courseDetailsId: lecture.course.details.id,
       };
-    }
+    })
   )
-);
+  // sort ascending by lecture start time
+  .sort((a, b) => a.start.getTime() - b.start.getTime());
 
-ics.createEvents(events, (e, ics) => {
-  if (e) throw e;
+export const eventsByOrganisation = () => {
+  const orgsLookup = Object.create(null);
+  const grouping = Object.create(null);
 
-  console.log(ics);
-  fs.writeFileSync("./events.ics", ics, "utf-8");
-});
+  for (const event of events) {
+    const { organisation } = event.organisation;
+
+    // assume organisation is same in each event, as it should be
+    orgsLookup[organisation.id] = { ...organisation };
+
+    const eventsOfThisOrg = grouping[organisation.id] || [];
+    eventsOfThisOrg.push({
+      ...event,
+      // replace org object with reference to the full org object
+      // (its id)
+      organisation: organisation.id,
+    });
+    grouping[organisation.id] = eventsOfThisOrg;
+  }
+
+  return {
+    "organisations-by-id": orgsLookup,
+    events: grouping,
+  };
+};
+
+// export const icsEvents = events.map(({ courseDetailsId, ...e }) => ({
+//   ...e,
+//   start: toIcsDate(e.start),
+//   end: e.end ? toIcsDate(e.end) : undefined,
+// }));
+
+// ics.createEvents(events, (e, ics) => {
+//   if (e) throw e;
+
+//   console.log(ics);
+//   fs.writeFileSync("./events.ics", ics, "utf-8");
+// });
 
 /**
  * const event = {
