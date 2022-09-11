@@ -3,6 +3,12 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
 
+  i18n: {
+    locales: ["en", "fi", "sv"],
+
+    defaultLocale: "en",
+  },
+
   async rewrites() {
     return [
       {

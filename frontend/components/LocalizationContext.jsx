@@ -1,10 +1,9 @@
+import { useRouter } from "next/router";
 import { createContext, useState, useMemo, useContext } from "react";
 import { makeT } from "../translations";
 
-export const LANGS = ["fi", "en", "sv"];
-
 export const LocalizationContext = createContext({
-  langs: LANGS,
+  langs: ["fi", "en", "sv"],
   lang: "fi",
   setLang: (lang) => {},
   /**
@@ -21,8 +20,8 @@ export const LocalizationContext = createContext({
 
 export const useLocalizationContext = () => useContext(LocalizationContext);
 
-const makeGetLocalizedString = (lang) => {
-  const langOrder = [...LANGS];
+const makeGetLocalizedString = (locales, lang) => {
+  const langOrder = [...locales];
   langOrder.splice(langOrder.indexOf(lang, 1));
   langOrder.unshift(lang);
 
@@ -38,17 +37,16 @@ const makeGetLocalizedString = (lang) => {
 };
 
 export const LocalizationContextContainer = ({ children }) => {
-  const [lang, setLang] = useState("fi");
+  const { locale, locales } = useRouter();
 
   const state = useMemo(
     () => ({
-      langs: LANGS,
-      lang,
-      setLang,
-      l: makeGetLocalizedString(lang),
-      t: makeT(lang),
+      langs: locales,
+      lang: locale,
+      l: makeGetLocalizedString(locales, locale),
+      t: makeT(locale),
     }),
-    [lang, setLang]
+    [locale, locales]
   );
 
   return (

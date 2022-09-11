@@ -1,0 +1,33 @@
+.landing_block {
+  width: 100%;
+  display: block;
+
+  padding: 0 calc(15% + 1rem);
+  padding-top: 4rem;
+  margin: 0 4rem;
+
+  @media (max-width: 959px) {
+    padding: 0 1rem;
+    padding-top: 2rem;
+  }
+}
+
+.title {
+  font-size: 2.5rem;
+  letter-spacing: -2px;
+  line-height: 1.15em;
+  text-transform: uppercase;
+
+  color: var(--grayscale-dark-text);
+  padding-bottom: 0.4em;
+  margin: 0;
+}
+
+.text {
+  font-size: 1rem;
+  letter-spacing: 0;
+  line-height: 1.7em;
+  margin: 0 0 24px;
+
+  color: var(--grayscale-dark);
+}
