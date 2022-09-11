@@ -1,0 +1,105 @@
+$event-bg: #039be5;
+$event-border: lighten($event-bg, 10%);
+
+@import "react-big-calendar/lib/sass/styles";
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: var(--main-font-family, "Helvetica, Arial, sans-serif");
+  font-size: var(--base-font-size, 16px);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --font-size-tiny: 12px;
+  --font-size-small: 14px;
+  --font-size-base: 16px;
+  --font-size-medium: 18px;
+  --font-size-large: 20px;
+  --font-size-x-large: 54px;
+  --font-size-xx-large: 40px;
+  --font-size-xxx-large: 54px;
+  --font-size-xxxx-large: 80px;
+
+  --font-weight-base: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --brand-main: #0e688b;
+  --brand-main-soft: #b1e7ff;
+  --brand-main-bright: #48c5f8;
+  --brand-main-light: #107eab;
+  --brand-main-active: #005379;
+  --brand-main-dark: #003146;
+  --brand-main-nearly-black: #000222;
+  --link-blue: #0479a4;
+  --link-disabled: #767676;
+  --grayscale-white: #fff;
+  --grayscale-slightly-gray: #fefefe;
+  --grayscale-light: #f8f8f8;
+  --grayscale-medium: #d2d2d2;
+  --grayscale-background-box: #f5f5f5;
+  --grayscale-tabs-border: #e6e6e6;
+  --grayscale-background-arrow: #dfdfdf;
+  --grayscale-medium-dark: #979797;
+  --grayscale-dark: #555555;
+  --grayscale-dark-text: #222222;
+  --grayscale-black: #000000;
+  --additional-red-light: #e5053a;
+  --additional-red-dark: #a31621;
+  --additional-purple-light: #420039;
+  --additional-yellow: #f9a21a;
+  --additional-skyblue: #48c5f8;
+  --additional-orange: #d14600;
+  --additional-green-light: #96ba3c;
+  --additional-green-dark: #006400;
+  --hover-gray: #eaeaea;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    color: white;
+    background: black;
+  }
+} */
+
+.rbc-time-gutter.rbc-time-column {
+  .rbc-timeslot-group {
+    border-bottom: none;
+    position: relative;
+    padding-right: 0.5rem;
+  }
+
+  .rbc-timeslot-group::after {
+    content: "";
+    position: absolute;
+    display: block;
+    bottom: 0;
+    right: 0;
+    width: 0.5rem;
+    border-bottom: 1px solid $cell-border;
+  }
+
+  .rbc-time-slot {
+    transform: translateY(-25%);
+    font-size: var(--font-size-tiny);
+    color: var(--grayscale-dark-text);
+  }
+}
+
+.rbc-event-label {
+  display: none;
+}
