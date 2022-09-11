@@ -58,6 +58,9 @@ function LectureTitle({ event }: { event: ApiEvent }) {
   );
 }
 
+const calendarMin = parse("07:00", "HH:mm", new Date());
+const calendarMax = parse("20:00", "HH:mm", new Date());
+
 function WeekCalendar({ events = [] }: WeekCalendarProps) {
   const evts = events.map((e) => ({
     start: new Date(e.start),
@@ -92,6 +95,8 @@ function WeekCalendar({ events = [] }: WeekCalendarProps) {
         culture="fi-FI"
         step={60}
         timeslots={1}
+        min={calendarMin}
+        max={calendarMax}
       />
     </div>
   );

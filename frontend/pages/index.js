@@ -1,4 +1,11 @@
-import { useContext, useState, useEffect, createContext, useMemo } from "react";
+import {
+  useContext,
+  useState,
+  useEffect,
+  createContext,
+  useMemo,
+  useCallback,
+} from "react";
 import Head from "next/head";
 import Image from "next/image";
 import axios from "axios";
@@ -8,7 +15,7 @@ import "@itcenteratunihelsinki/huds-lib/dist/huds-lib/huds-lib.css";
 import styles from "../styles/Home.module.scss";
 import { useLocalizationContext } from "../components/LocalizationContext";
 import WeekCalendar from "../components/WeekCalendar";
-import { Header } from "../components/Header";
+import OrganisationSelector from "../components/OrganisationSelector";
 
 export async function getServerSideProps(context) {
   const res = await axios.get(
@@ -96,37 +103,52 @@ function TodaysLectures({ events }) {
 /**
  * @param {{ events: import("../api").Data }} props
  */
-function LectureList({ events }) {
+function Lectures({ events }) {
   const { l } = useLocalizationContext();
 
   const sortedOrganizations = Object.values(events["organisations-by-id"]).sort(
     (a, b) => l(a.name).localeCompare(l(b.name))
   );
 
-  const [selectedOrganisation, setSelectedOrganisation] = useState(
-    sortedOrganizations[0].id
+  const [selectedOrganisations, setSelectedOrganisations] = useState([
+    sortedOrganizations[0].id,
+  ]);
+
+  const handleOrganisationChange = useCallback(
+    (newValues) => {
+      setSelectedOrganisations(newValues.map((kv) => kv.value));
+    },
+    [setSelectedOrganisations]
   );
 
   return (
     <div>
       <div style={{ borderBottom: "2px solid grey", padding: "0 0 1rem 0" }}>
-        Organization:
-        <select
+        <OrganisationSelector
+          options={sortedOrganizations.map((org) => ({
+            value: org.id,
+            label: l(org.name),
+          }))}
+          value={selectedOrganisations}
+          onChange={handleOrganisationChange}
+        />
+        {/* <select
           value={selectedOrganisation}
           onChange={(e) => setSelectedOrganisation(e.currentTarget.value)}
         >
-          {Object.values(events["organisations-by-id"])
-            .sort((a, b) => l(a.name).localeCompare(l(b.name)))
-            .map(({ id, name }) => (
-              <option key={id} value={id}>
-                {l(name)}
-              </option>
-            ))}
-        </select>
+          {sortedOrganizations.map(({ id, name }) => (
+            <option key={id} value={id}>
+              {l(name)}
+            </option>
+          ))}
+        </select> */}
       </div>
       <div style={{ marginTop: "1rem" }}>
-        <WeekCalendar events={events.events[selectedOrganisation] || []} />
-        <TodaysLectures events={events.events[selectedOrganisation]} />
+        <WeekCalendar
+          events={selectedOrganisations.flatMap(
+            (id) => events.events[id] || []
+          )}
+        />
       </div>
     </div>
   );
@@ -168,7 +190,7 @@ export default function Home({ events }) {
               ))}
             </select>
           </div>
-          <LectureList events={events} />
+          <Lectures events={events} />
         </div>
       </main>
 
