@@ -94,9 +94,13 @@ a {
   }
 
   .rbc-time-slot {
-    transform: translateY(-25%);
     font-size: var(--font-size-tiny);
     color: var(--grayscale-dark-text);
+  }
+
+  .rbc-time-slot .rbc-label {
+    display: block;
+    transform: translateY(-50%);
   }
 }
 
