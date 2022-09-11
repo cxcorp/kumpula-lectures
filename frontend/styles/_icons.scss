@@ -1,0 +1,30 @@
+@font-face {
+  font-family: hy-icons;
+  font-style: normal;
+  font-weight: 400;
+  src: url(../public/fonts/hy-icons-e098b8c158a28380af9132f4ec16e718.eot);
+  src: url(../public/fonts/hy-icons-e098b8c158a28380af9132f4ec16e718.eot?#iefix)
+      format("eot"),
+    url(../public/fonts/hy-icons-a4b1f0819bf3e1da2b1a37428dd0a9fa.woff)
+      format("woff"),
+    url(../public/fonts/hy-icons-8ea2f460e4f132cf7b2a59acfa606a84.ttf)
+      format("truetype");
+}
+
+.icon:before {
+  box-sizing: border-box;
+}
+
+.icon--caret-down:after {
+  content: "";
+}
+
+.icon--caret-down:after {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-family: hy-icons;
+  font-style: normal;
+  font-weight: 400;
+  vertical-align: bottom;
+}

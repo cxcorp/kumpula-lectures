@@ -1,0 +1,44 @@
+.organisation-selector {
+  font-size: var(--font-size-small);
+
+  & &__control,
+  & &__menu {
+    border-radius: 0;
+  }
+
+  & &__control--is-focused {
+    border-color: var(--brand-main);
+    box-shadow: 0 0 0 1px var(--brand-main);
+  }
+
+  & &__menu {
+    font-size: var(--font-size-small);
+    color: var(--brand-main-active);
+
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+  }
+
+  & &__multi-value__remove:hover {
+    background-color: var(--brand-main-bright);
+    color: white;
+  }
+
+  & &__option:active {
+    background-color: var(--brand-main-dark);
+  }
+
+  & &__option--is-focused {
+    background-color: var(--brand-main);
+    color: var(--grayscale-white);
+  }
+
+  & &__multi-value {
+    background-color: var(--brand-main);
+    color: var(--grayscale-white);
+  }
+
+  & &__multi-value__label {
+    font-size: var(--font-size-small);
+    color: var(--grayscale-white);
+  }
+}

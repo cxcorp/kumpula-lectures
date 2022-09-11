@@ -1,11 +1,4 @@
-import {
-  useContext,
-  useState,
-  useEffect,
-  createContext,
-  useMemo,
-  useCallback,
-} from "react";
+import { useState, useCallback } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import axios from "axios";
@@ -39,67 +32,6 @@ export async function getServerSideProps(context) {
   };
 }
 
-const getTodayUnixTimestamps = () => {
-  const date = new Date();
-  date.setHours(0);
-  date.setMinutes(0);
-  date.setMilliseconds(0);
-  const start = date.getTime();
-  date.setHours(23);
-  date.setMinutes(59);
-  date.setMilliseconds(999);
-  const end = date.getTime();
-  return { start, end };
-};
-
-/**
- * @param {{ events: import("../api").Event[] }} props
- */
-function TodaysLectures({ events }) {
-  const todayEvents = useMemo(() => {
-    // let's hope nobody keeps tab open over night
-    const today = getTodayUnixTimestamps();
-    return events.filter(
-      (ev) =>
-        Date.parse(ev.end) >= today.start || Date.parse(ev.start) <= today.end
-    );
-  });
-
-  return (
-    <div>
-      {todayEvents.map((e) => (
-        <div
-          key={`${e.courseDetailsId}-${e.start}-${e.location}`}
-          style={{
-            borderRadius: "5px",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
-            marginBottom: "0.75rem ",
-            fontSize: "0.9rem",
-            textAlign: "left",
-          }}
-        >
-          <div
-            style={{
-              padding: "0.5rem 1rem",
-              background: "#f3f3f6",
-              fontWeight: "500",
-            }}
-          >
-            {e.lectureName}
-          </div>
-          <div style={{ padding: "0.5rem 1rem" }}>
-            <p style={{ marginTop: "0" }}>{e.studyGroupType}</p>
-            <p>
-              {e.start} - {e.end}
-            </p>
-            <p style={{ marginBottom: "0" }}>{e.exactumClass}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 /**
  * @param {{ events: import("../api").Data }} props
  */
@@ -111,7 +43,10 @@ function Lectures({ events }) {
   );
 
   const [selectedOrganisations, setSelectedOrganisations] = useState([
-    sortedOrganizations[0].id,
+    // sortedOrganizations[0].id,
+    // pre-select CS BSc and MSc
+    "hy-org-116716376",
+    "hy-org-116738259",
   ]);
 
   const handleOrganisationChange = useCallback(
@@ -123,8 +58,9 @@ function Lectures({ events }) {
 
   return (
     <div>
-      <div style={{ borderBottom: "2px solid grey", padding: "0 0 1rem 0" }}>
+      <div>
         <OrganisationSelector
+          className={styles.org_selector}
           options={sortedOrganizations.map((org) => ({
             value: org.id,
             label: l(org.name),
@@ -132,16 +68,6 @@ function Lectures({ events }) {
           value={selectedOrganisations}
           onChange={handleOrganisationChange}
         />
-        {/* <select
-          value={selectedOrganisation}
-          onChange={(e) => setSelectedOrganisation(e.currentTarget.value)}
-        >
-          {sortedOrganizations.map(({ id, name }) => (
-            <option key={id} value={id}>
-              {l(name)}
-            </option>
-          ))}
-        </select> */}
       </div>
       <div style={{ marginTop: "1rem" }}>
         <WeekCalendar

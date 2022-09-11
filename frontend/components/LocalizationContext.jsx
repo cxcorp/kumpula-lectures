@@ -1,4 +1,5 @@
 import { createContext, useState, useMemo, useContext } from "react";
+import { makeT } from "../translations";
 
 export const LANGS = ["fi", "en", "sv"];
 
@@ -6,7 +7,16 @@ export const LocalizationContext = createContext({
   langs: LANGS,
   lang: "fi",
   setLang: (lang) => {},
+  /**
+   * Picks the string of the current locale if available
+   * @param {import("../api").Name} value name with multiple translations
+   */
   l: (value) => "",
+  /**
+   * Translates the specified string
+   * @type {ReturnType<typeof makeT>}
+   */
+  t: (value) => "",
 });
 
 export const useLocalizationContext = () => useContext(LocalizationContext);
@@ -36,6 +46,7 @@ export const LocalizationContextContainer = ({ children }) => {
       lang,
       setLang,
       l: makeGetLocalizedString(lang),
+      t: makeT(lang),
     }),
     [lang, setLang]
   );

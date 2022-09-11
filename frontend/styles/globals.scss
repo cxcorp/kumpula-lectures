@@ -1,7 +1,8 @@
-$event-bg: #039be5;
+$event-bg: #399be4;
 $event-border: lighten($event-bg, 10%);
 
 @import "react-big-calendar/lib/sass/styles";
+@import "./icons.scss";
 
 html,
 body {
@@ -106,5 +107,13 @@ a {
 }
 
 .rbc-event-label {
+  display: none;
+}
+
+// hide "all day events" cells
+// we don't use them, they take extra space, and they have an annoying
+// "user-select:none" which for some reason leaks through to the react-select dropdown,
+// making that area unclickable&unscrollable
+.rbc-allday-cell {
   display: none;
 }
