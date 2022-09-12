@@ -95,7 +95,6 @@ const localeToName = {
  */
 export default function Home({ events }) {
   const { locale, locales } = useRouter();
-  console.log(locales);
   const availableLocales = locales.filter((value) => value !== locale);
   const { t } = useLocalizationContext();
 
