@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { getISOWeek, format, parse, startOfWeek, getDay } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
+import type { HeaderProps } from "react-big-calendar";
 import cls from "classnames";
 
 import type { Event as ApiEvent } from "../api";
@@ -9,7 +11,8 @@ import { getWeekDaysForWeek } from "../util/dates";
 import styles from "../styles/WeekCalendar.module.scss";
 
 const rbcLocalizer = dateFnsLocalizer({
-  format,
+  format: (date: string | number | Date, format: string, opts: object) =>
+    formatInTimeZone(date, "Europe/Helsinki", format, opts),
   parse,
   startOfWeek,
   getDay,
