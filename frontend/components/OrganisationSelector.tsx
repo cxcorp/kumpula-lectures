@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 import ReactSelect from "react-select";
 
 import { useLocalizationContext } from "./LocalizationContext";
@@ -18,11 +18,13 @@ function OrganisationSelector({
   onChange,
 }: OrganisationSelectorProps<{ value: string; label: string }>) {
   const { t } = useLocalizationContext();
+  const selectId = useId();
 
   return (
     <div className={className}>
       <label className={styles.label}>{t("Responsible unit")}</label>
       <ReactSelect
+        instanceId={selectId}
         className="organisation-selector"
         classNamePrefix="organisation-selector"
         onChange={onChange}
