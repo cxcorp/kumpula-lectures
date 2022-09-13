@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { getISOWeek, format, parse, startOfWeek, getDay } from "date-fns";
+import React from "react";
+import { format, parse, startOfWeek, getDay } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import type { HeaderProps } from "react-big-calendar";
@@ -7,7 +7,7 @@ import cls from "classnames";
 
 import type { Event as ApiEvent } from "../api";
 import { dateLocale } from "../common";
-import { getWeekDaysForWeek } from "../util/dates";
+import WeekCalendarHeader from "./WeekCalendarHeader";
 import styles from "../styles/WeekCalendar.module.scss";
 
 const rbcLocalizer = dateFnsLocalizer({
@@ -63,6 +63,11 @@ function LectureTitle({ event }: { event: ApiEvent }) {
 
 const calendarMin = parse("07:00", "HH:mm", new Date());
 const calendarMax = parse("20:00", "HH:mm", new Date());
+const calendarComponents = {
+  week: {
+    header: WeekCalendarHeader,
+  },
+};
 
 function WeekCalendar({ events = [] }: WeekCalendarProps) {
   const evts = events.map((e) => ({
@@ -74,20 +79,8 @@ function WeekCalendar({ events = [] }: WeekCalendarProps) {
 
   return (
     <div className={styles.calendar}>
-      {/* <div> */}
-      {/* <div className={styles.header}>
-          {weekDays.map((day) => (
-            <DayHeaderCell key={day.toISOString()} day={day} />
-          ))}
-        </div>
-        <div className={styles.body}></div>
-        <ul>
-          {weekDays.map((day) => (
-            <li key={day.toISOString()}>{day.toISOString()}</li>
-          ))}
-        </ul> */}
-      {/* </div> */}
       <Calendar
+        components={calendarComponents}
         className={styles.week_calendar}
         tooltipAccessor={(e) => e.tooltip}
         events={evts}
@@ -104,13 +97,5 @@ function WeekCalendar({ events = [] }: WeekCalendarProps) {
     </div>
   );
 }
-
-// interface WeekCalendarContainerProps {
-//   events: ApiEvent[];
-// }
-
-// function WeekCalendarContainer({ events }: WeekCalendarContainerProps) {
-//   return <WeekCalendar events={events} />;
-// }
 
 export default WeekCalendar;
