@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
@@ -9,6 +9,7 @@ import {
   useDismiss,
 } from "@floating-ui/react-dom-interactions";
 import cls from "classnames";
+import { CSSTransition } from "react-transition-group";
 
 import type { Event as ApiEvent } from "../api";
 import { dateLocale } from "../common";
@@ -150,42 +151,59 @@ function WeekCalendar({ events = [] }: WeekCalendarProps) {
   return (
     <div className={styles.calendar}>
       {open && selectedEvent && (
-        <dialog open className={styles.popover} {...getPopoverProps()}>
-          <div className={styles.popover__content}>
-            <div className={styles.popover__title}>
-              {selectedEvent.originalEvent.lectureName}
-            </div>
-            <div style={{ fontSize: "12px", padding: "0.5rem 1rem" }}>
-              {formatInTimeZone(
-                selectedEvent.start,
-                "Europe/Helsinki",
-                "dd.MM.yyyy"
-              )}{" "}
-              -{" "}
-              {formatInTimeZone(
-                selectedEvent.start,
-                "Europe/Helsinki",
-                "HH:mm"
+        <CSSTransition
+          in={open}
+          appear
+          unmountOnExit
+          timeout={1000}
+          classNames="weekcalendar__popover"
+        >
+          <dialog open className={styles.popover} {...getPopoverProps()}>
+            <div
+              className={cls(
+                "weekcalendar__popover-content",
+                styles.popover__content
               )}
-              &ndash;
-              {formatInTimeZone(selectedEvent.end, "Europe/Helsinki", "HH:mm")}
-              <br />
-              {selectedEvent.originalEvent.studyGroupType}
-              <br />
-              {selectedEvent.originalEvent.location}
-              <br />
-              <br />
-              <a
-                href={getStudiesCourseLink(selectedEvent.originalEvent)}
-                target="_blank"
-                rel="noopener"
-                className={styles.popover__link}
-              >
-                See course in Studies <span className="icon icon--offsite" />
-              </a>
+            >
+              <div className={styles.popover__title}>
+                {selectedEvent.originalEvent.lectureName}
+              </div>
+              <div style={{ fontSize: "12px", padding: "0.5rem 1rem" }}>
+                {formatInTimeZone(
+                  selectedEvent.start,
+                  "Europe/Helsinki",
+                  "dd.MM.yyyy"
+                )}{" "}
+                -{" "}
+                {formatInTimeZone(
+                  selectedEvent.start,
+                  "Europe/Helsinki",
+                  "HH:mm"
+                )}
+                &ndash;
+                {formatInTimeZone(
+                  selectedEvent.end,
+                  "Europe/Helsinki",
+                  "HH:mm"
+                )}
+                <br />
+                {selectedEvent.originalEvent.studyGroupType}
+                <br />
+                {selectedEvent.originalEvent.location}
+                <br />
+                <br />
+                <a
+                  href={getStudiesCourseLink(selectedEvent.originalEvent)}
+                  target="_blank"
+                  rel="noopener"
+                  className={styles.popover__link}
+                >
+                  See course in Studies <span className="icon icon--offsite" />
+                </a>
+              </div>
             </div>
-          </div>
-        </dialog>
+          </dialog>
+        </CSSTransition>
       )}
 
       <Calendar
