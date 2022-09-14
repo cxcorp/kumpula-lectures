@@ -103,7 +103,7 @@ function usePopup() {
       },
       ...getFloatingProps(),
     }),
-    [floating, strategy, getFloatingProps]
+    [floating, strategy, getFloatingProps, x, y]
   );
 
   return {
@@ -195,7 +195,7 @@ function WeekCalendar({ events = [] }: WeekCalendarProps) {
                 <a
                   href={getStudiesCourseLink(selectedEvent.originalEvent)}
                   target="_blank"
-                  rel="noopener"
+                  rel="noreferrer noopener"
                   className={styles.popover__link}
                 >
                   See course in Studies <span className="icon icon--offsite" />
