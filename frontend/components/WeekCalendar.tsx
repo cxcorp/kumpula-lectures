@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef, useState } from "react";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import { autoUpdate, arrow, flip, offset, shift } from "@floating-ui/react-dom";
+import { autoUpdate, flip, offset, shift } from "@floating-ui/react-dom";
 import {
   useFloating,
   useInteractions,
@@ -66,27 +66,14 @@ function usePopup() {
   const [open, setOpen] = useState(false);
   const [referenceElement, setReferenceElement] = useState<HTMLElement>();
 
-  const {
-    x,
-    y,
-    reference,
-    floating,
-    strategy,
-    placement,
-    context,
-    middlewareData: { arrow: { x: arrowX, y: arrowY } = {} },
-  } = useFloating({
-    open,
-    onOpenChange: setOpen,
-    placement: "right",
-    whileElementsMounted: autoUpdate,
-    middleware: [
-      offset(3),
-      flip(),
-      shift({ padding: 5 }),
-      arrow({ element: arrowRef, padding: 5 }),
-    ],
-  });
+  const { x, y, reference, floating, strategy, placement, context } =
+    useFloating({
+      open,
+      onOpenChange: setOpen,
+      placement: "right",
+      whileElementsMounted: autoUpdate,
+      middleware: [offset(3), flip(), shift({ padding: 5 })],
+    });
 
   const { getFloatingProps } = useInteractions([
     useDismiss(context, {
@@ -125,25 +112,10 @@ function usePopup() {
     [floating, strategy, getFloatingProps]
   );
 
-  const getArrowProps = useCallback(
-    () => ({
-      ref: arrowRef,
-      style: {
-        left: arrowX !== null ? `${arrowX}px` : "",
-        top: arrowY !== null ? `${arrowY}px` : "",
-        right: "",
-        bottom: "",
-        [staticSide]: "-4px",
-      },
-    }),
-    [arrowRef, arrowX, arrowY, staticSide]
-  );
-
   return {
     open,
     openPopup,
     getPopoverProps,
-    getArrowProps,
   };
 }
 
@@ -163,7 +135,7 @@ function WeekCalendar({ events = [] }: WeekCalendarProps) {
   const [selectedEvent, setSelectedEvent] = useState<
     typeof evts[0] | undefined
   >();
-  const { open, openPopup, getPopoverProps, getArrowProps } = usePopup();
+  const { open, openPopup, getPopoverProps } = usePopup();
 
   const handleSelectEvent = useCallback(
     (
@@ -191,6 +163,20 @@ function WeekCalendar({ events = [] }: WeekCalendarProps) {
               {selectedEvent.originalEvent.lectureName}
             </div>
             <div style={{ fontSize: "12px", padding: "0.5rem 1rem" }}>
+              {formatInTimeZone(
+                selectedEvent.start,
+                "Europe/Helsinki",
+                "dd.MM.yyyy"
+              )}{" "}
+              -{" "}
+              {formatInTimeZone(
+                selectedEvent.start,
+                "Europe/Helsinki",
+                "HH:mm"
+              )}
+              &ndash;
+              {formatInTimeZone(selectedEvent.end, "Europe/Helsinki", "HH:mm")}
+              <br />
               {selectedEvent.originalEvent.studyGroupType}
               <br />
               {selectedEvent.originalEvent.location}
@@ -201,8 +187,6 @@ function WeekCalendar({ events = [] }: WeekCalendarProps) {
               </a>
             </div>
           </div>
-
-          <div className={styles.popover__arrow} {...getArrowProps()} />
         </dialog>
       )}
 

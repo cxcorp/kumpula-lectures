@@ -61,28 +61,34 @@
   font-size: var(--font-size-tiny);
 }
 
+$popover-radius: 5px;
+
 .popover {
   z-index: 10;
   border: none;
   margin: 0;
   width: 15rem;
-  height: 10rem;
+  // min-height: 10rem;
   background: white;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.2),
     0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-  border-radius: 5px;
+  border-radius: $popover-radius;
   padding: 0;
 }
 
+.popover__content {
+  border-radius: $popover-radius;
+}
+
 .popover__title {
+  // have to specify border radius for ALL of these because Chrome leaves out the
+  // rounding when the dialog is placed at .05 px x/y coords (wtf?)
+  border-top-right-radius: $popover-radius;
+  border-top-left-radius: $popover-radius;
   padding: 0.5rem 1rem;
   background: #f0f0f0;
 }
 
-.popover__arrow {
-  position: absolute;
-  background: white;
-  width: 12px;
-  height: 12px;
-  transform: rotate(45deg);
+.popover__link {
+  color: #0479a4;
 }
