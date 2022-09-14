@@ -1,5 +1,6 @@
 .calendar {
   width: 100%;
+  min-width: 600px;
 }
 
 .header,
@@ -39,6 +40,10 @@
 
 .week_calendar {
   height: 60vh;
+
+  @media only screen and (max-width: 768px) {
+    height: 100vh;
+  }
 }
 
 .event {

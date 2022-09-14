@@ -83,7 +83,9 @@ function Lectures({ organizations }) {
           onChange={handleOrganisationChange}
         />
       </div>
-      <div style={{ marginTop: "1rem", position: "relative" }}>
+      <div
+        style={{ marginTop: "1rem", position: "relative", overflowX: "scroll" }}
+      >
         {loading && (
           <div
             style={{
