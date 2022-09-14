@@ -45,7 +45,6 @@ function Lectures({ organizations }) {
   }, []);
 
   const [selectedOrganisations, setSelectedOrganisations] = useState([
-    // sortedOrganizations[0].id,
     // pre-select CS BSc and MSc
     "hy-org-116716376",
     "hy-org-116738259",
