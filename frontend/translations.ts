@@ -20,6 +20,17 @@ export const translations = {
   },
 };
 
+/**
+ * List of weekdays per locale, starting from Sunday. Starting from
+ * Sunday because Date.getDate() returns an integer starting from
+ * Sunday being 0.
+ */
+export const weekdays = {
+  en: ["sun", "mon", "tue", "wed", "thu", "fri", "sat"],
+  fi: ["su", "ma", "ti", "ke", "to", "pe", "la"],
+  sv: ["sö", "må", "ti", "on", "to", "fr", "lö"],
+};
+
 export const makeT =
   (lang: string) => (text: keyof typeof translations["en"]) =>
     translations[lang]?.[text] ??

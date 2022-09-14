@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@floating-ui/react-dom-interactions": "^0.9.3",
     "@itcenteratunihelsinki/huds-lib": "^0.6.4",
     "@types/react-big-calendar": "^0.38.1",
     "axios": "^0.27.2",

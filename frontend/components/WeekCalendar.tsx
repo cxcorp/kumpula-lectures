@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import type { HeaderProps } from "react-big-calendar";
+import { autoUpdate, arrow, flip, offset, shift } from "@floating-ui/react-dom";
+import {
+  useFloating,
+  useInteractions,
+  useDismiss,
+} from "@floating-ui/react-dom-interactions";
 import cls from "classnames";
 
 import type { Event as ApiEvent } from "../api";
@@ -19,28 +24,9 @@ const rbcLocalizer = dateFnsLocalizer({
   locales: { "fi-FI": dateLocale },
 });
 
-interface DayHeaderCellProps {
-  day: Date;
-}
-
-function DayHeaderCell({ day }: DayHeaderCellProps) {
-  return (
-    <div className={styles.day_header_cell}>
-      <span className={styles.day_header_cell__day_name}>
-        {format(day, "EEEEEE", { locale: dateLocale })}
-      </span>
-      <span className={styles.day_header_cell__day_number}>
-        {day.getDate()}
-      </span>
-    </div>
-  );
-}
-
 interface WeekCalendarProps {
   events?: ApiEvent[];
 }
-
-// function DayBodyColumn({});
 
 function LectureTitle({ event }: { event: ApiEvent }) {
   const timeRange = [
@@ -68,21 +54,162 @@ const calendarComponents = {
     header: WeekCalendarHeader,
   },
 };
+const calendarTooltipAccessor = (e: {
+  start: Date;
+  end: Date;
+  title: JSX.Element; //e.lectureName,
+  tooltip: string;
+}) => e.tooltip;
+
+function usePopup() {
+  const arrowRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
+  const [referenceElement, setReferenceElement] = useState<HTMLElement>();
+
+  const {
+    x,
+    y,
+    reference,
+    floating,
+    strategy,
+    placement,
+    context,
+    middlewareData: { arrow: { x: arrowX, y: arrowY } = {} },
+  } = useFloating({
+    open,
+    onOpenChange: setOpen,
+    placement: "right",
+    whileElementsMounted: autoUpdate,
+    middleware: [
+      offset(3),
+      flip(),
+      shift({ padding: 5 }),
+      arrow({ element: arrowRef, padding: 5 }),
+    ],
+  });
+
+  const { getFloatingProps } = useInteractions([
+    useDismiss(context, {
+      referencePointerDown: true,
+    }),
+  ]);
+
+  // get the CSS side which we need to offset
+  // split by - to deal with "bottom-right" -> "bottom"
+  const staticSide = {
+    top: "bottom",
+    right: "left",
+    bottom: "top",
+    left: "right",
+  }[placement.split("-")[0]];
+
+  const openPopup = useCallback(
+    (element: HTMLElement) => {
+      reference(element);
+      setReferenceElement(element);
+      setOpen(true);
+    },
+    [reference, setReferenceElement, setOpen]
+  );
+
+  const getPopoverProps = useCallback(
+    () => ({
+      ref: floating,
+      style: {
+        position: strategy,
+        top: `${y ?? 0}px`,
+        left: `${x ?? 0}px`,
+      },
+      ...getFloatingProps(),
+    }),
+    [floating, strategy, getFloatingProps]
+  );
+
+  const getArrowProps = useCallback(
+    () => ({
+      ref: arrowRef,
+      style: {
+        left: arrowX !== null ? `${arrowX}px` : "",
+        top: arrowY !== null ? `${arrowY}px` : "",
+        right: "",
+        bottom: "",
+        [staticSide]: "-4px",
+      },
+    }),
+    [arrowRef, arrowX, arrowY, staticSide]
+  );
+
+  return {
+    open,
+    openPopup,
+    getPopoverProps,
+    getArrowProps,
+  };
+}
 
 function WeekCalendar({ events = [] }: WeekCalendarProps) {
-  const evts = events.map((e) => ({
-    start: new Date(e.start),
-    end: new Date(e.end),
-    title: <LectureTitle event={e} />, //e.lectureName,
-    tooltip: `${e.lectureName}, ${e.studyGroupType} (${e.location})`,
-  }));
+  const evts = useMemo(
+    () =>
+      events.map((e) => ({
+        start: new Date(e.start),
+        end: new Date(e.end),
+        title: <LectureTitle event={e} />, //e.lectureName,
+        tooltip: `${e.lectureName}, ${e.studyGroupType} (${e.location})`,
+        originalEvent: e,
+      })),
+    [events]
+  );
+
+  const [selectedEvent, setSelectedEvent] = useState<
+    typeof evts[0] | undefined
+  >();
+  const { open, openPopup, getPopoverProps, getArrowProps } = usePopup();
+
+  const handleSelectEvent = useCallback(
+    (
+      event: {
+        start: Date;
+        end: Date;
+        title: JSX.Element;
+        tooltip: string;
+        originalEvent: ApiEvent;
+      },
+      e: React.SyntheticEvent<HTMLElement, Event>
+    ) => {
+      setSelectedEvent(event);
+      openPopup(e.currentTarget);
+    },
+    [openPopup]
+  );
 
   return (
     <div className={styles.calendar}>
+      {open && selectedEvent && (
+        <dialog open className={styles.popover} {...getPopoverProps()}>
+          <div className={styles.popover__content}>
+            <div className={styles.popover__title}>
+              {selectedEvent.originalEvent.lectureName}
+            </div>
+            <div style={{ fontSize: "12px", padding: "0.5rem 1rem" }}>
+              {selectedEvent.originalEvent.studyGroupType}
+              <br />
+              {selectedEvent.originalEvent.location}
+              <br />
+              <br />
+              <a href="#" style={{ color: "#0479a4" }}>
+                See course in Studies
+              </a>
+            </div>
+          </div>
+
+          <div className={styles.popover__arrow} {...getArrowProps()} />
+        </dialog>
+      )}
+
       <Calendar
         components={calendarComponents}
         className={styles.week_calendar}
-        tooltipAccessor={(e) => e.tooltip}
+        tooltipAccessor={calendarTooltipAccessor}
         events={evts}
         localizer={rbcLocalizer}
         startAccessor="start"
@@ -93,6 +220,7 @@ function WeekCalendar({ events = [] }: WeekCalendarProps) {
         timeslots={1}
         min={calendarMin}
         max={calendarMax}
+        onSelectEvent={handleSelectEvent}
       />
     </div>
   );

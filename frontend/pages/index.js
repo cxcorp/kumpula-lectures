@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import axios from "axios";
@@ -60,6 +60,11 @@ function Lectures({ events }) {
     [setSelectedOrganisations]
   );
 
+  const eventList = useMemo(
+    () => selectedOrganisations.flatMap((id) => events.events[id] || []),
+    [selectedOrganisations]
+  );
+
   return (
     <div>
       <div>
@@ -74,11 +79,7 @@ function Lectures({ events }) {
         />
       </div>
       <div style={{ marginTop: "1rem" }}>
-        <WeekCalendar
-          events={selectedOrganisations.flatMap(
-            (id) => events.events[id] || []
-          )}
-        />
+        <WeekCalendar events={eventList} />
       </div>
     </div>
   );

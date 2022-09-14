@@ -1,0 +1,25 @@
+[class*="rbc-today"] .header {
+  font-weight: var(--font-weight-semibold);
+  color: var(--brand-main);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  color: var(--grayscale-dark);
+}
+
+.day_name {
+  text-transform: uppercase;
+  font-size: var(--font-size-tiny);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
+
+.day_number {
+  font-size: var(--font-size-large);
+  // font-weight: var(--font-weight-normal);
+  margin-bottom: 0.1rem;
+  // color: lighten(#555555, 10%);
+}
