@@ -1,0 +1,164 @@
+[
+  {
+    "id": "hy-org-116708736",
+    "code": "500-M004",
+    "name": {
+      "fi": "Alkeishiukkasfysiikan ja astrofysikaalisten tieteiden maisteriohjelma",
+      "sv": "Magisterprogrammet i elementarpartikelfysik och astrofysikaliska vetenskaper",
+      "en": "Master's Programme in Particle Physics and Astrophysical Sciences"
+    }
+  },
+  {
+    "id": "hy-org-127334781",
+    "code": "500-K008",
+    "name": {
+      "fi": "Bachelor´s Programme in Science",
+      "sv": "Bachelor´s Programme in Science",
+      "en": "Bachelor´s Programme in Science"
+    }
+  },
+  {
+    "id": "hy-org-116710672",
+    "code": "500-M010",
+    "name": {
+      "fi": "Datatieteen maisteriohjelma",
+      "sv": "Magisterprogrammet i data science",
+      "en": "Master's Programme in Data Science"
+    }
+  },
+  {
+    "id": "hy-org-116715050",
+    "code": "500-K002",
+    "name": {
+      "fi": "Fysikaalisten tieteiden kandiohjelma",
+      "sv": "Kandidatprogrammet i fysikaliska vetenskaper",
+      "en": "Bachelor's Programme in Physical Sciences"
+    }
+  },
+  {
+    "id": "hy-org-116717222",
+    "code": "500-M011",
+    "name": {
+      "fi": "Geologian ja geofysiikan maisteriohjelma",
+      "sv": "Magisterprogrammet i geologi och geofysik",
+      "en": "Master's Programme in Geology and Geophysics"
+    }
+  },
+  {
+    "id": "hy-org-116715197",
+    "code": "500-K006",
+    "name": {
+      "fi": "Geotieteiden kandiohjelma",
+      "sv": "Kandidatprogrammet i geovetenskap",
+      "en": "Bachelor's Programme in Geosciences"
+    }
+  },
+  {
+    "id": "hy-org-116718026",
+    "code": "500-M006",
+    "name": {
+      "fi": "Ilmakehätieteiden maisteriohjelma",
+      "sv": "Magisterprogrammet i atmosfärsvetenskaper",
+      "en": "Master's Programme in Atmospheric Sciences"
+    }
+  },
+  {
+    "id": "hy-org-116715394",
+    "code": "500-K003",
+    "name": {
+      "fi": "Kemian kandiohjelma",
+      "sv": "Kandidatprogrammet i kemi",
+      "en": "Bachelor's Programme in Chemistry"
+    }
+  },
+  {
+    "id": "hy-org-116710577",
+    "code": "500-M002",
+    "name": {
+      "fi": "Life Science Informatics -maisteriohjelma",
+      "sv": "Magisterprogrammet i Life Science Informatics",
+      "en": "Master's Programme in Life Science Informatics"
+    }
+  },
+  {
+    "id": "hy-org-116715660",
+    "code": "500-K007",
+    "name": {
+      "fi": "Maantieteen kandiohjelma",
+      "sv": "Kandidatprogrammet i geografi",
+      "en": "Bachelor's Programme in Geography"
+    }
+  },
+  {
+    "id": "hy-org-116719566",
+    "code": "500-M012",
+    "name": {
+      "fi": "Maantieteen maisteriohjelma",
+      "sv": "Magisterprogrammet i geografi",
+      "en": "Master's Programme in Geography"
+    }
+  },
+  {
+    "id": "hy-org-116712512",
+    "code": "500-K001",
+    "name": {
+      "fi": "Matemaattisten tieteiden kandiohjelma",
+      "sv": "Kandidatprogrammet i matematiska vetenskaper",
+      "en": "Bachelor's Programme in Mathematical Sciences"
+    }
+  },
+  {
+    "id": "hy-org-116710675",
+    "code": "500-M001",
+    "name": {
+      "fi": "Matematiikan ja tilastotieteen maisteriohjelma",
+      "sv": "Magisterprogrammet i matematik och statistik",
+      "en": "Master's Programme in Mathematics and Statistics"
+    }
+  },
+  {
+    "id": "hy-org-116715911",
+    "code": "500-K004",
+    "name": {
+      "fi": "Matematiikan, fysiikan ja kemian opettajan kandiohjelma",
+      "sv": "Kandidatprogrammet för ämneslärare i matematik, fysik och kemi",
+      "en": "Bachelor's Programme for Teachers of Mathematics, Physics and Chemistry"
+    }
+  },
+  {
+    "id": "hy-org-116719983",
+    "code": "500-M005",
+    "name": {
+      "fi": "Materiaalitutkimuksen maisteriohjelma",
+      "sv": "Magisterprogrammet i materialforskning",
+      "en": "Master's Programme in Materials Research"
+    }
+  },
+  {
+    "id": "hy-org-116738247",
+    "code": "500-M003",
+    "name": {
+      "fi": "Teoreettisten ja laskennallisten menetelmien maisteriohjelma",
+      "sv": "Magisterprogrammet i teoretiska och beräkningsmetoder",
+      "en": "Master's Programme in Theoretical and Computational Methods"
+    }
+  },
+  {
+    "id": "hy-org-116716376",
+    "code": "500-K005",
+    "name": {
+      "fi": "Tietojenkäsittelytieteen kandiohjelma",
+      "sv": "Kandidatprogrammet i datavetenskap",
+      "en": "Bachelor's Programme in Computer Science"
+    }
+  },
+  {
+    "id": "hy-org-116738259",
+    "code": "500-M009",
+    "name": {
+      "fi": "Tietojenkäsittelytieteen maisteriohjelma",
+      "sv": "Magisterprogrammet i datavetenskap",
+      "en": "Master's Programme in Computer Science"
+    }
+  }
+]

@@ -23,6 +23,10 @@
   content: "";
 }
 
+.icon--spinner::after {
+  content: "";
+}
+
 .icon::after {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -31,4 +35,17 @@
   font-style: normal;
   font-weight: 400;
   vertical-align: bottom;
+}
+
+.spinner {
+  animation: rotateforever 500ms linear infinite;
+}
+
+@keyframes rotateforever {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

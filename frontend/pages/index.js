@@ -1,6 +1,8 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import Link from "next/link";
 import axios from "axios";
 
 import "@itcenteratunihelsinki/huds-lib/dist/fonts/fonts.css";
@@ -10,41 +12,37 @@ import { useLocalizationContext } from "../components/LocalizationContext";
 import WeekCalendar from "../components/WeekCalendar";
 import OrganisationSelector from "../components/OrganisationSelector";
 import LandingBlock from "../components/LandingBlock";
+import organizations from "../data/organizations.json";
 import hyBlack from "../public/hy_black2.png";
-import { useRouter } from "next/router";
-import Link from "next/link";
 
 export async function getServerSideProps(context) {
-  const res = await axios.get(
-    "http://127.0.0.1:3001/api/events-by-organisation"
-  );
-  if (res.data.status !== "ok") {
-    return {
-      props: {
-        events: {
-          "organisations-by-id": {},
-          events: {},
-        },
-      },
-    };
-  }
+  // const organizations = await import("../data/organizations.json");
 
   return {
     props: {
-      events: res.data.data,
+      organizations: organizations,
     },
   };
 }
 
-/**
- * @param {{ events: import("../api").Data }} props
- */
-function Lectures({ events }) {
+function Lectures({ organizations }) {
   const { l } = useLocalizationContext();
 
-  const sortedOrganizations = Object.values(events["organisations-by-id"]).sort(
-    (a, b) => l(a.name).localeCompare(l(b.name))
-  );
+  const [events, setEvents] = useState({
+    events: [],
+    "organisations-by-id": {},
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadEvents() {
+      setLoading(true);
+      const events = await import("../data/events_by_org.json");
+      setEvents(events);
+      setLoading(false);
+    }
+    loadEvents();
+  }, []);
 
   const [selectedOrganisations, setSelectedOrganisations] = useState([
     // sortedOrganizations[0].id,
@@ -60,9 +58,18 @@ function Lectures({ events }) {
     [setSelectedOrganisations]
   );
 
+  const organizationOptions = useMemo(
+    () =>
+      organizations.map((org) => ({
+        value: org.id,
+        label: l(org.name),
+      })),
+    [organizations]
+  );
+
   const eventList = useMemo(
     () => selectedOrganisations.flatMap((id) => events.events[id] || []),
-    [selectedOrganisations]
+    [events, selectedOrganisations]
   );
 
   return (
@@ -70,15 +77,37 @@ function Lectures({ events }) {
       <div>
         <OrganisationSelector
           className={styles.org_selector}
-          options={sortedOrganizations.map((org) => ({
-            value: org.id,
-            label: l(org.name),
-          }))}
+          options={organizationOptions}
           value={selectedOrganisations}
           onChange={handleOrganisationChange}
         />
       </div>
-      <div style={{ marginTop: "1rem" }}>
+      <div style={{ marginTop: "1rem", position: "relative" }}>
+        {loading && (
+          <div
+            style={{
+              left: 0,
+              right: 0,
+              width: "100%",
+              height: "100%",
+              background: "rgba(128,128,128,0.2)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "absolute",
+              zIndex: 19,
+            }}
+          >
+            <span
+              className="icon icon--spinner spinner"
+              style={{
+                fontSize: "26px",
+                color: "#107eab",
+              }}
+              aria-label="Loading..."
+            />
+          </div>
+        )}
         <WeekCalendar events={eventList} />
       </div>
     </div>
@@ -91,10 +120,7 @@ const localeToName = {
   en: "English",
 };
 
-/**
- * @param {{ events: import("../api").Data }} props
- */
-export default function Home({ events }) {
+export default function Home({ organizations }) {
   const { locale, locales } = useRouter();
   const availableLocales = locales.filter((value) => value !== locale);
   const { t } = useLocalizationContext();
@@ -142,7 +168,7 @@ export default function Home({ events }) {
         <LandingBlock />
 
         <div className={styles.description}>
-          <Lectures events={events} />
+          <Lectures organizations={organizations} />
         </div>
       </main>
     </div>
