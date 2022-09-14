@@ -65,33 +65,22 @@ const calendarTooltipAccessor = (e: {
 }) => e.tooltip;
 
 function usePopup() {
-  const arrowRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [referenceElement, setReferenceElement] = useState<HTMLElement>();
 
-  const { x, y, reference, floating, strategy, placement, context } =
-    useFloating({
-      open,
-      onOpenChange: setOpen,
-      placement: "right",
-      whileElementsMounted: autoUpdate,
-      middleware: [offset(3), flip(), shift({ padding: 5 })],
-    });
+  const { x, y, reference, floating, strategy, context } = useFloating({
+    open,
+    onOpenChange: setOpen,
+    placement: "right",
+    whileElementsMounted: autoUpdate,
+    middleware: [offset(3), flip(), shift({ padding: 5 })],
+  });
 
   const { getFloatingProps } = useInteractions([
     useDismiss(context, {
       referencePointerDown: true,
     }),
   ]);
-
-  // get the CSS side which we need to offset
-  // split by - to deal with "bottom-right" -> "bottom"
-  const staticSide = {
-    top: "bottom",
-    right: "left",
-    bottom: "top",
-    left: "right",
-  }[placement.split("-")[0]];
 
   const openPopup = useCallback(
     (element: HTMLElement) => {
