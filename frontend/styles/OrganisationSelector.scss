@@ -12,6 +12,7 @@
   }
 
   & &__menu {
+    z-index: 20;
     font-size: var(--font-size-small);
     color: var(--brand-main-active);
 
