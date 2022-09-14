@@ -15,11 +15,15 @@
   box-sizing: border-box;
 }
 
-.icon--caret-down:after {
+.icon--caret-down::after {
   content: "";
 }
 
-.icon--caret-down:after {
+.icon--offsite::after {
+  content: "";
+}
+
+.icon::after {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: inline-block;

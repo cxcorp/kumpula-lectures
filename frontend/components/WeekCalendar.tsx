@@ -47,6 +47,9 @@ function LectureTitle({ event }: { event: ApiEvent }) {
   );
 }
 
+const getStudiesCourseLink = (e: ApiEvent) =>
+  `https://studies.helsinki.fi/courses/cur/${encodeURI(e.courseDetailsId)}`;
+
 const calendarMin = parse("07:00", "HH:mm", new Date());
 const calendarMax = parse("20:00", "HH:mm", new Date());
 const calendarComponents = {
@@ -182,8 +185,13 @@ function WeekCalendar({ events = [] }: WeekCalendarProps) {
               {selectedEvent.originalEvent.location}
               <br />
               <br />
-              <a href="#" style={{ color: "#0479a4" }}>
-                See course in Studies
+              <a
+                href={getStudiesCourseLink(selectedEvent.originalEvent)}
+                target="_blank"
+                rel="noopener"
+                className={styles.popover__link}
+              >
+                See course in Studies <span className="icon icon--offsite" />
               </a>
             </div>
           </div>
