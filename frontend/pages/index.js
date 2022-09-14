@@ -59,11 +59,13 @@ function Lectures({ organizations }) {
 
   const organizationOptions = useMemo(
     () =>
-      organizations.map((org) => ({
-        value: org.id,
-        label: l(org.name),
-      })),
-    [organizations]
+      organizations
+        .map((org) => ({
+          value: org.id,
+          label: l(org.name),
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label)),
+    [organizations, l]
   );
 
   const eventList = useMemo(
