@@ -107,8 +107,9 @@ function usePopup() {
       ref: floating,
       style: {
         position: strategy,
-        top: `${y ?? 0}px`,
-        left: `${x ?? 0}px`,
+        top: "0px",
+        left: "0px",
+        transform: `translate(${x ?? 0}px, ${y ?? 0}px)`,
       },
       ...getFloatingProps(),
     }),
